@@ -4,13 +4,13 @@ package abstractfactory
 type PessoaJuridica struct {
 }
 
-//MakeUser func
+//MakeUser implementation of AbstractFactory
 func (pessoa *PessoaJuridica) MakeUser(name string, document string, tipo string) IUser {
-	return &PessoaJuridicaUser{
-		User: User{
-			name:     name,
-			document: document,
-			tipo:     tipo,
-		},
+	return &User{
+		Name:               name,
+		Document:           document,
+		Tipo:               tipo,
+		ValidationNameDone: false,
+		ValidationTypeDone: false,
 	}
 }

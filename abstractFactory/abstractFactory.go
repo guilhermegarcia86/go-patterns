@@ -7,7 +7,7 @@ type AbstractFactory interface {
 	MakeUser(name string, document string, tipo string) IUser
 }
 
-//UserFactory factory
+//UserFactory factory that decides how struct to create
 func UserFactory(tipo string) (AbstractFactory, error) {
 	if tipo == "PF" {
 		return &PessoaFisica{}, nil
