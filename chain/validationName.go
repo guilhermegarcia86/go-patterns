@@ -1,9 +1,9 @@
 package chain
 
 import (
-	"fmt"
+	"log"
 
-	abstractfactory "github.com/guilhermegarcia86/go-patterns/abstractFactory"
+	"github.com/guilhermegarcia86/go-patterns/builder"
 )
 
 //ValidationName struct
@@ -12,17 +12,17 @@ type ValidationName struct {
 }
 
 //Execute a function to implement the user name validation execution
-func (validationName *ValidationName) Execute(user *abstractfactory.User) {
+func (validationName *ValidationName) Execute(user builder.Person) {
 
 	if user.ValidationNameDone {
-		fmt.Println("Validation name already done")
+		log.Println("Validation name already done " + user.Name)
 		validationName.Next.Execute(user)
 		return
 	}
 
-	fmt.Println("Validation name user starting")
+	log.Println("Validation name user starting " + user.Name)
 	user.ValidationNameDone = true
-	fmt.Println("Validation finished")
+	log.Println("Validation finished")
 }
 
 //SetNext a function that set the next call

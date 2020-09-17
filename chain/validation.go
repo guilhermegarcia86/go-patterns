@@ -1,9 +1,11 @@
 package chain
 
-import abstractfactory "github.com/guilhermegarcia86/go-patterns/abstractFactory"
+import (
+	"github.com/guilhermegarcia86/go-patterns/builder"
+)
 
 //Validation interface has functions for Chain of Responsability Pattern
 type Validation interface {
-	Execute(*abstractfactory.User)
+	Execute(builder.Person)
 	SetNext(Validation)
 }

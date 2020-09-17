@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	abstractfactory "github.com/guilhermegarcia86/go-patterns/abstractFactory"
+	"github.com/guilhermegarcia86/go-patterns/builder"
 	"github.com/guilhermegarcia86/go-patterns/chain"
 	"github.com/guilhermegarcia86/go-patterns/proxy"
 )
@@ -17,30 +17,44 @@ func main() {
 		pass = "pass"
 	)
 
+	//Open connection, heavy process
 	conn := proxy.OpenConnection(url, port, user, pass)
 
+	//Access database
 	msgI, err := conn.Access(url, port, user, pass)
 	if err != nil {
-		log.Fatalln("ERROR")
+		log.Fatalln("ERROR ", err)
 	}
 	log.Println(msgI)
 
+	//Do not open connection again
 	msgII, err := conn.Access(url, port, user, pass)
 	if err != nil {
-		log.Fatal("ERROR")
+		log.Fatal("ERROR ", err)
 	}
 	log.Println(msgII)
 
-	pfFactory, _ := abstractfactory.UserFactory("PF")
-	pessoaFisica := pfFactory.MakeUser("Pessoa Fisica", "20411992023", "PF")
+	//Build a PersonBuilder, set values and build a NaturalPerson
+	personBuilder := builder.GetBuilder("PF")
 
-	pjFactory, _ := abstractfactory.UserFactory("PJ")
-	pessoaJuridica := pjFactory.MakeUser("Pessoa Juridica", "82630818000152", "PJ")
+	personBuilder.SetName("John Doe")
+	personBuilder.SetDocument("21368063004")
+	naturalPerson := personBuilder.Build()
 
+	//Build a PersonBuilder, set values and build a LegalPerson
+	personBuilder = builder.GetBuilder("PJ")
+	personBuilder.SetName("Cool Company")
+	personBuilder.SetDocument("47902850000149")
+	legalPerson := personBuilder.Build()
+
+	//Begin a Validation chain
 	validationName := &chain.ValidationName{}
 	validationType := &chain.ValidationType{}
 
 	validationType.SetNext(validationName)
-	validationType.Execute(pessoaFisica.GetUser())
-	validationType.Execute(pessoaJuridica.GetUser())
+
+	validationType.Execute(naturalPerson)
+
+	validationType.Execute(legalPerson)
+
 }

@@ -1,9 +1,9 @@
 package chain
 
 import (
-	"fmt"
+	"log"
 
-	abstractfactory "github.com/guilhermegarcia86/go-patterns/abstractFactory"
+	"github.com/guilhermegarcia86/go-patterns/builder"
 )
 
 //ValidationType struct
@@ -12,16 +12,17 @@ type ValidationType struct {
 }
 
 //Execute a function to implement the user type validation execution
-func (validationType *ValidationType) Execute(user *abstractfactory.User) {
+func (validationType *ValidationType) Execute(user builder.Person) {
 
 	if user.ValidationTypeDone {
-		fmt.Println("Validation type already done")
+		log.Println("Validation type already done " + user.Type)
 		validationType.Next.Execute(user)
 		return
 	}
 
-	fmt.Println("Validation type user starting")
+	log.Println("Validation type user starting " + user.Type)
 	user.ValidationTypeDone = true
+	log.Println("Execute next validation")
 	validationType.Next.Execute(user)
 }
 
